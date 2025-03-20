@@ -45,6 +45,7 @@ type ExamContextType = {
     }
   ) => ExamResult;
   getStudentExams: (rollNo: string) => ExamResult[];
+  getStudentResults: (rollNo: string) => ExamResult[]; // Added this line to fix the error
   getStudentRank: (examId: string, rollNo: string) => any;
   getTopPerformers: (examId: string, limit?: number) => ExamResult[];
   getCategoryTopPerformers: (examId: string, category: string, limit?: number) => ExamResult[];
