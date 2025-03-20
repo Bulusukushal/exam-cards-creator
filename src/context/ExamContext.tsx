@@ -155,6 +155,7 @@ export const ExamProvider: React.FC<{ children: React.ReactNode }> = ({ children
         getResults,
         submitResult,
         getStudentExams,
+        getStudentResults: getStudentExams, // Add this line to provide the required method
         getStudentRank,
         getTopPerformers,
         getCategoryTopPerformers,
