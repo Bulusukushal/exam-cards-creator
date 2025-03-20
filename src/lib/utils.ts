@@ -1,7 +1,7 @@
 
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Exam, Question, ExamResult, Student, RankData } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
