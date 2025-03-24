@@ -14,12 +14,12 @@ let results: ExamResult[] = [];
 let activeExams: Record<string, boolean> = {};
 
 // Parse document text format
-export function parseQuestionDocument(text: string): Question[] {
+export function parseQuestionDocument(text: string, defaultCategory?: Question['category']): Question[] {
   const lines = text.split('\n').filter(line => line.trim());
   const questions: Question[] = [];
   
   let currentQuestion: Partial<Question> = {};
-  let currentCategory = '';
+  let currentCategory = defaultCategory || '';
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();

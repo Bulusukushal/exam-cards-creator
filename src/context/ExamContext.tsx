@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { 
   Exam, 
@@ -28,7 +27,16 @@ type ExamContextType = {
   exams: Exam[];
   loadExams: () => void;
   getExam: (id: string) => Exam | undefined;
-  createNewExam: (year: string, semester: string, documentText: string) => Exam;
+  createNewExam: (
+    year: string, 
+    semester: string, 
+    documents: {
+      coding: string;
+      math: string;
+      aptitude: string;
+      communication: string;
+    }
+  ) => Exam;
   updateExamQuestions: (examId: string, questions: Question[]) => Exam | undefined;
   activateExam: (examId: string) => string;
   deactivateExam: (examId: string) => void;
@@ -45,7 +53,7 @@ type ExamContextType = {
     }
   ) => ExamResult;
   getStudentExams: (rollNo: string) => ExamResult[];
-  getStudentResults: (rollNo: string) => ExamResult[]; // Added this line to fix the error
+  getStudentResults: (rollNo: string) => ExamResult[];
   getStudentRank: (examId: string, rollNo: string) => any;
   getTopPerformers: (examId: string, limit?: number) => ExamResult[];
   getCategoryTopPerformers: (examId: string, category: string, limit?: number) => ExamResult[];
@@ -80,9 +88,31 @@ export const ExamProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return getExamById(id);
   };
 
-  const createNewExam = (year: string, semester: string, documentText: string): Exam => {
-    const questions = parseQuestionDocument(documentText);
-    const exam = createExam(year, semester, questions);
+  const createNewExam = (
+    year: string, 
+    semester: string, 
+    documents: {
+      coding: string;
+      math: string;
+      aptitude: string;
+      communication: string;
+    }
+  ): Exam => {
+    // Parse questions from each document with appropriate category
+    const codingQuestions = parseQuestionDocument(documents.coding, 'coding');
+    const mathQuestions = parseQuestionDocument(documents.math, 'math');
+    const aptitudeQuestions = parseQuestionDocument(documents.aptitude, 'aptitude');
+    const communicationQuestions = parseQuestionDocument(documents.communication, 'communication');
+    
+    // Combine all questions
+    const allQuestions = [
+      ...codingQuestions,
+      ...mathQuestions,
+      ...aptitudeQuestions,
+      ...communicationQuestions
+    ];
+    
+    const exam = createExam(year, semester, allQuestions);
     loadExams(); // Refresh exams list
     return exam;
   };
@@ -155,7 +185,7 @@ export const ExamProvider: React.FC<{ children: React.ReactNode }> = ({ children
         getResults,
         submitResult,
         getStudentExams,
-        getStudentResults: getStudentExams, // Add this line to provide the required method
+        getStudentResults: getStudentExams,
         getStudentRank,
         getTopPerformers,
         getCategoryTopPerformers,
